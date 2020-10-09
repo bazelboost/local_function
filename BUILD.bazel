@@ -1,0 +1,26 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
+_public_hdrs = [
+    "include/boost/*.hpp",
+    "include/boost/local_function/*.hpp",
+    "include/boost/local_function/aux_/*.hpp",
+    "include/boost/local_function/aux_/macro/*.hpp",
+    "include/boost/local_function/aux_/macro/code_/*.hpp",
+    "include/boost/local_function/aux_/preprocessor/traits/*.hpp",
+    "include/boost/local_function/aux_/preprocessor/traits/decl_/*.hpp",
+    "include/boost/local_function/aux_/preprocessor/traits/decl_/validate_/*.hpp",
+    "include/boost/local_function/aux_/preprocessor/traits/decl_sign_/validate_/*.hpp",
+]
+
+cc_library(
+    name = "local_function_internal",
+    hdrs = glob(["include/boost/**/*.hpp"], exclude = _public_hdrs),
+)
+
+cc_library(
+    name = "local_function",
+    visibility = ["//visibility:public"],
+    includes = ["include"],
+    hdrs = glob(_public_hdrs),
+    deps = [":local_function_internal"],
+)
